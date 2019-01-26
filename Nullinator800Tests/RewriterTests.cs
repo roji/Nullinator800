@@ -66,6 +66,19 @@ class C {
 
         [TestCase(@"
 class C {
+    /// Comment
+    [CanBeNull]
+    string Foo() => ""hello"";
+}",
+            @"
+class C {
+    /// Comment
+    string? Foo() => ""hello"";
+}",
+            TestName = "PreserveComment")]
+
+        [TestCase(@"
+class C {
     public Foo([CanBeNull] string s) {}
 }",
             @"
@@ -88,6 +101,12 @@ class C {
         {
             var actualAfter = new NullabilityRewriter().Visit(SyntaxFactory.ParseSyntaxTree(before).GetRoot()).ToFullString();
             Assert.That(actualAfter, Is.EqualTo(expectedAfter));
+        }
+
+        [Test]
+        public void Crap()
+        {
+            /* hello */ /* what */ Console.WriteLine("asdf");
         }
     }
 }
